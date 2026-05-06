@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduation Gift - 703</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #990000; /* Merah gelap elegan */
+            color: white;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .page {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.8s;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Gaya Foto */
+        .photo-box {
+            width: 100px; height: 130px;
+            object-fit: cover;
+            border: 3px solid white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .photo-row { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        .grid-photos {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 8px; margin-top: 15px;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px; border-radius: 15px;
+            max-width: 90%; font-size: 0.9em;
+            line-height: 1.5; border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Tombol & Ikon */
+        .btn-next {
+            margin-top: 20px; padding: 12px 25px;
+            background: white; color: #990000;
+            border: none; border-radius: 25px;
+            font-weight: bold; cursor: pointer;
+        }
+
+        .gift { font-size: 70px; cursor: pointer; transition: 0.3s; }
+        .gift:hover { transform: scale(1.2); }
+        .letter { font-size: 80px; cursor: pointer; }
+        .heart { font-size: 70px; color: #ff4d4d; cursor: pointer; animation: beat 1s infinite; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        #flower-canvas {
+            position: absolute; top: 0; left: 0;
+            pointer-events: none; z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="flower-canvas"></canvas>
+
+    <!-- Halaman 1: Kado -->
+    <div id="page1" class="page active">
+        <div style="display: flex; gap: 15px;" onclick="startFlowers()">
+            <div class="gift">🎁</div>
+            <div class="gift">🎁</div>
+            <div class="gift">🎁</div>
+        </div>
+        <h2 style="margin-top: 20px;">for kak Clara, kak Memori, kak Lisbet</h2>
+        <p>(Klik kadonya!)</p>
+    </div>
+
+    <!-- Halaman 2: Foto Bertiga -->
+    <div id="page2" class="page">
+        <div class="photo-row">
+            <img src="clara.jpeg" class="photo-box">
+            <img src="memo.jpeg" class="photo-box">
+            <img src="lisbet.jpeg" class="photo-box">
+        </div>
+        <h1>Happy Graduation kakak-kakak!</h1>
+        <button class="btn-next" onclick="nextPage(3)">Buka Surat ➔</button>
+    </div>
+
+    <!-- Halaman 3: Surat -->
+    <div id="page3" class="page">
+        <div class="letter" onclick="nextPage(4)">✉️</div>
+        <p>Ada pesan singkat dari kami...</p>
+    </div>
+
+    <!-- Halaman 4: Ucapan Panjang -->
+    <div id="page4" class="page">
+        <img src="bertiga.jpeg" style="width: 220px; height: 150px; object-fit: cover; border: 4px solid white; border-radius: 10px; margin-bottom: 15px;">
+        <div class="message-box">
+            <p><strong>Congratulations on your big day, kak Clara, kak Memo, dan Kak Lisbet!</strong></p>
+            <p>Selamat akhirnya lulus dari asrama dan kampus sekaligus! Makasih ya Kak sudah jadi kakak kamar yang super baik dan mau tolong-menolong selama ini.</p>
+            <p>Kamar bakal sepi banget tanpa kalian, kami pasti bakal rindu tawa dan kebersamaan kita. <i>You guys made this place feel like home.</i></p>
+            <p>Sukses buat masa resiprokasinya di sekolah nanti ya Kak. Inget, jangan galak-galak sama muridnya! 😂 Tunjukkan kalau kalian adalah guru yang luar biasa!</p>
+            <p><strong>The world is waiting for your greatness.</strong></p>
+        </div>
+        <button class="btn-next" onclick="nextPage(5)">Next ❤️</button>
+    </div>
+
+    <!-- Halaman 5: Foto Rame-rame -->
+    <div id="page5" class="page">
+        <div class="heart" id="bigHeart" onclick="showFinal()">❤️</div>
+        <div id="finalContent" style="display:none">
+            <div class="grid-photos">
+                <img src="kamar1.jpeg" class="photo-box">
+                <img src="kamar2.jpeg" class="photo-box">
+                <img src="kamar3.jpeg" class="photo-box">
+                <img src="kamar4.jpeg" class="photo-box">
+                <img src="kamar5.jpeg" class="photo-box">
+                <img src="kamar6.jpeg" class="photo-box">
+            </div>
+            <h2 style="margin-top: 15px;">We love you kak Clara, kak Memo, dan Kak Lisbet! ❤️</h2>
+            <p>From, 703 yang super cute</p>
+        </div>
+    </div>
+
+    <script>
+        function nextPage(num) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + num).classList.add('active');
+        }
+
+        const canvas = document.getElementById('flower-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let flowers = [];
+        function startFlowers() {
+            for(let i=0; i<60; i++) {
+                flowers.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height + Math.random() * 200,
+                    size: Math.random() * 25 + 15,
+                    speed: Math.random() * 4 + 2,
+                    emoji: ['🌸', '🌼', '🌺', '🌷', '🌹'][Math.floor(Math.random()*5)]
+                });
+            }
+            requestAnimationFrame(animateFlowers);
+            setTimeout(() => nextPage(2), 3500);
+        }
+
+        function animateFlowers() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            flowers.forEach(f => {
+                f.y -= f.speed;
+                ctx.font = f.size + "px Arial";
+                ctx.fillText(f.emoji, f.x, f.y);
+            });
+            requestAnimationFrame(animateFlowers);
+        }
+
+        function showFinal() {
+            document.getElementById('finalContent').style.display = 'block';
+            document.getElementById('bigHeart').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
